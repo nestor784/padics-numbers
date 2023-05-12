@@ -141,19 +141,26 @@ class NumberP:
         w=1
         dividendo = NumberP(u.show)
         while w<15:
-            c+= d
             t = [(i, v*NumberP(str(i))) for i in range(self.p)]
             r = [u[0] for u in t if u[1].show.split('.')[0][-1] == dividendo.show.split('.')[0][-1]]
             iadic = NumberP(str(max(r)))
             d = str(max(r))
-            index = self.auxiliar(dividendo,v*iadic) 
-            c+= '0'*index
-            dividendo = self.deltasustraction(dividendo, v*iadic)
+            dividendo, index = self.deltasustraction(dividendo, v*iadic)
+            c+= d
+            c+= '0'*-(index+1)
             w+=1
         c = c.replace('w','')
+        if n-k != 0:
+            if n-k > 0:
+                result = (c[:n-k] + '.' + c[n-k:])[::-1]
+                return NumberP(result)
+            else:
+                r += '0'*(-(n-k))
+                return NumberP(r)
         return NumberP(c[::-1])
 
     def deltasustraction(self,u,v):
+        rc = False
         s = u.show.split('.')[0]
         t = v.show.split('.')[0]
         N = max(len(s),len(t))
@@ -170,10 +177,10 @@ class NumberP:
             c += str(buff % self.p)
         if e == 1:
             c += str(self.p - 1)
-        if s[N-1] == '0':
+        if s[N-1] < t[N-1]:
             c = c.ljust(20,str(self.p -1))
-        r, _ = NumberP(c[::-1]).asunit
-        return r
+        r, n = NumberP(c[::-1]).asunit
+        return r, n
 
     @staticmethod
     def auxiliar(u,v):
@@ -185,7 +192,8 @@ class NumberP:
         return 0
 
 if __name__ == "__main__":
-    x = NumberP('200.01')
-    y = NumberP('100')
+    NumberP.p = 5
+    x = NumberP('20001')
+    y = NumberP('1')
     z = NumberP('0')
-    print(x*y)
+    print(x/y)
