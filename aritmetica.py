@@ -62,14 +62,20 @@ class NumberP:
 
     def __sub__(self,v1):
         c = ''
-        for i,s in enumerate(v1.show[::-1]):
+        i = True
+        for s in v1.show[::-1]:
             if s == '.':
                 c+= '.'
             else:    
-                if i == 0:
-                    c += str(self.p - int(s))
+                if i:
+                    if s == '0':
+                        c += '0'
+                    else:
+                        c += str(self.p - int(s))
+                        i = False
                 else:
                     c += str(self.p - 1 - int(s))
+        c += str(self.p - 1)*6
         c = NumberP(c[::-1])
         return self.__add__(c)
 
@@ -141,7 +147,7 @@ class NumberP:
             dividendo = self.deltasustraction(dividendo, v*iadic)
             w+=1
         c = c.replace('w','')
-        return c[::-1]
+        return NumberP(c[::-1])
 
     def deltasustraction(self,u,v):
         s = u.show.split('.')[0]
@@ -169,14 +175,13 @@ class NumberP:
     def auxiliar(u,v):
         s = u.show.split('.')[0][::-1]
         t = v.show.split('.')[0][::-1]
-        print(s,t)
         for i in range(min(len(s),len(t))):
             if s[i] != t[i] and i > 0:
                 return i-1
         return 0
 
 if __name__ == "__main__":
-    x = NumberP('421')
-    y = NumberP('1')
-    z = NumberP('153')
-    print(x/z)
+    x = NumberP('0')
+    y = NumberP('100.0')
+    z = NumberP('0')
+    print(x-y)
